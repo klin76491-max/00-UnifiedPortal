@@ -4,6 +4,7 @@ URL configuration for 00-UnifiedPortal (統一應用大廳與 SSO 服務).
 
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,3 +12,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),      # Google 登入認證
     path('', include('portal.urls')),                 # 九宮格大廳與驗證 API
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+

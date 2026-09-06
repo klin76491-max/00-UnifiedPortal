@@ -96,9 +96,13 @@ TIME_ZONE = 'Asia/Taipei'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Session and CSRF Cookie settings (避免同網域多專案 Cookie 衝突)
+SESSION_COOKIE_NAME = 'fwm_portal_sessionid'
+CSRF_COOKIE_NAME = 'fwm_portal_csrftoken'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
