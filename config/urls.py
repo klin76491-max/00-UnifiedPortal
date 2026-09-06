@@ -13,5 +13,11 @@ urlpatterns = [
     path('', include('portal.urls')),                 # 九宮格大廳與驗證 API
 ]
 
-urlpatterns += staticfiles_urlpatterns()
+from django.conf import settings
+from django.views.static import serve
+from django.urls import re_path
+
+urlpatterns += [
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATICFILES_DIRS[0]}),
+]
 

@@ -63,18 +63,45 @@ python manage.py runserver 127.0.0.1:8000
 docker build -t alw-portal:latest .
 ```
 
-### 2. 啟動容器 (僅綁定 127.0.0.1 確保安全)
+### 2. 啟動容器 (映射本機 8081 埠)
 ```bash
+# -d: 背景執行容器
+# -p 127.0.0.1:8081:8000: 將本機 8081 映射到容器內的 8000 埠
+# --env-file: 載入 .env 環境變數
+# -e DJANGO_SUPERUSER_*: 首次啟動容器時自動建立 Django 超級管理員
+# -v: 將 SQLite 資料庫持久化保存在本機 dockerVolumn/00-UnifiedPortal
 docker run -d \
   --name alw-portal \
-  -p 127.0.0.1:8000:8000 \
+  -p 127.0.0.1:8081:8000 \
   --env-file .env \
-  -v alw_portal_data:/app \
+  -e DJANGO_SUPERUSER_USERNAME=admin \
+  -e DJANGO_SUPERUSER_EMAIL=admin@example.com \
+  -e DJANGO_SUPERUSER_PASSWORD=adminpassword \
+  -v "$PWD/../dockerVolumn/00-UnifiedPortal:/app/data" \
   --restart unless-stopped \
   alw-portal:latest
 ```
 
-### 3. 在容器內執行自動化測試
+### 3. 查看運行狀態與日誌
+```bash
+# 查看容器狀態
+docker ps -f name=alw-portal
+
+# 查看即時日誌
+docker logs -f alw-portal
+```
+
+### 4. 建立管理員帳號 (首次啟動)
+```bash
+docker exec -it alw-portal python manage.py createsuperuser
+```
+
+### 5. 停止與刪除容器
+```bash
+docker stop alw-portal && docker rm alw-portal
+```
+
+### 6. 在容器內執行自動化測試
 ```bash
 docker exec -it alw-portal python manage.py test portal -v 2
 ```

@@ -3,6 +3,7 @@ FROM python:3.12-slim
 # 設定環境變數
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV DATA_DIR=/app/data
 
 # 設定工作目錄
 WORKDIR /app
@@ -17,9 +18,9 @@ COPY . .
 # 賦予 entrypoint 執行權限
 RUN chmod +x docker-entrypoint.sh
 
-# 暴露 8000 埠號 (主機映射為 8000)
+# 暴露 8000 埠號 (主機映射為 8081)
 EXPOSE 8000
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "--insecure", "0.0.0.0:8000"]

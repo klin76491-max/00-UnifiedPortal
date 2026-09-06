@@ -1,0 +1,17 @@
+services:
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alw-portal
+    ports:
+      - "8081:8000"
+    env_file:
+      - .env
+    volumes:
+      - alw_portal_data:/app
+    restart: unless-stopped
+
+volumes:
+  alw_portal_data:
+
