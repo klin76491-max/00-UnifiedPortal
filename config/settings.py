@@ -113,3 +113,8 @@ GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8000/ac
 GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
 GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token'
 GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo'
+
+# 獨立 Cookie 命名避免子應用衝突
+SESSION_COOKIE_NAME = 'portal_sessionid'
+CSRF_COOKIE_NAME = 'portal_csrftoken'
+

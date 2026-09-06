@@ -42,6 +42,9 @@ class PortalHomeView(ListView):
         return context
 
 
+import urllib.parse
+
+
 class AuthVerifyAPIView(View):
     """
     Nginx 內部認證端點 - GET /api/auth-verify/
@@ -60,8 +63,9 @@ class AuthVerifyAPIView(View):
             user_id = str(request.user.id)
 
             response['X-User-Email'] = email
-            response['X-User-Name'] = name
+            response['X-User-Name'] = urllib.parse.quote(name)
             response['X-User-Id'] = user_id
             return response
         else:
             return HttpResponse("Unauthorized", status=401)
+
