@@ -1,0 +1,113 @@
+# Traditional Chinese translations for 00-UnifiedPortal.
+msgid ""
+msgstr ""
+"Project-Id-Version: 00-UnifiedPortal 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-29 19:25+0800\n"
+"PO-Revision-Date: 2026-08-29 19:25+0800\n"
+"Last-Translator: Antigravity\n"
+"Language-Team: Traditional Chinese\n"
+"Language: zh_Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "A Little Wonder 統一應用大廳 - 一站式探索全系列 Web 產品與服務"
+msgstr "A Little Wonder 統一應用大廳 - 一站式探索全系列 Web 產品與服務"
+
+msgid "A Little Wonder 應用大廳"
+msgstr "A Little Wonder 應用大廳"
+
+msgid "應用中心"
+msgstr "應用中心"
+
+msgid "登入"
+msgstr "登入"
+
+msgid "登出"
+msgstr "登出"
+
+msgid "語言"
+msgstr "語言"
+
+msgid "統一應用大廳"
+msgstr "統一應用大廳"
+
+msgid "A Little Wonder 應用大廳 - 一站式探索全系列 Web 產品"
+msgstr "A Little Wonder 應用大廳 - 一站式探索全系列 Web 產品"
+
+msgid "全域服務中心"
+msgstr "全域服務中心"
+
+msgid "歡迎回來，%(name)s！"
+msgstr "歡迎回來，%(name)s！"
+
+msgid "探索 A Little Wonder 精彩數位旅程"
+msgstr "探索 A Little Wonder 精彩數位旅程"
+
+msgid "登入一次，暢行全站所有專屬習慣養成、AI 日誌與探索工具！"
+msgstr "登入一次，暢行全站所有專屬習慣養成、AI 日誌與探索工具！"
+
+msgid "已上線應用"
+msgstr "已上線應用"
+
+msgid "本週新品"
+msgstr "本週新品"
+
+msgid "規劃總專案"
+msgstr "規劃總專案"
+
+msgid "全部應用"
+msgstr "全部應用"
+
+msgid "正式上線"
+msgstr "正式上線"
+
+msgid "公測中"
+msgstr "公測中"
+
+msgid "即將推出"
+msgstr "即將推出"
+
+msgid "維護中"
+msgstr "維護中"
+
+msgid "開啟應用 ➔"
+msgstr "開啟應用 ➔"
+
+msgid "即將推出 (Coming Soon)"
+msgstr "即將推出 (Coming Soon)"
+
+msgid "目前大廳尚未註冊任何子系統，請由管理後台新增！"
+msgstr "目前大廳尚未註冊任何子系統，請由管理後台新增！"
+
+msgid "前往 Django Admin 新增應用"
+msgstr "前往 Django Admin 新增應用"
+
+msgid "登入 - A Little Wonder 統一應用大廳"
+msgstr "登入 - A Little Wonder 統一應用大廳"
+
+msgid "登入 A Little Wonder 應用大廳"
+msgstr "登入 A Little Wonder 應用大廳"
+
+msgid "全系統統一採用 Google 帳號一鍵登入，登入一次暢行全站所有應用！"
+msgstr "全系統統一採用 Google 帳號一鍵登入，登入一次暢行全站所有應用！"
+
+msgid "使用 Google 帳號一鍵登入"
+msgstr "使用 Google 帳號一鍵登入"
+
+msgid "統一登入 (SSO) 特色"
+msgstr "統一登入 (SSO) 特色"
+
+msgid "首次授權自動配置全站通用的會員身分"
+msgstr "首次授權自動配置全站通用的會員身分"
+
+msgid "進出各子專案（打卡、學習日誌）免重複輸入帳密"
+msgstr "進出各子專案（打卡、學習日誌）免重複輸入帳密"
+
+msgid "採用 Google OAuth 2.0 銀行級安全防護機制"
+msgstr "採用 Google OAuth 2.0 銀行級安全防護機制"
+
+msgid "系統管理者後台登入："
+msgstr "系統管理者後台登入："

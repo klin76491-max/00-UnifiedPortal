@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "A Little Wonder 應用大廳 - 一站式探索全系列 Web 產品" %}{% endblock %}
+
+{% block content %}
+<!-- Hero Welcome Section -->
+<div class="portal-hero">
+  <div class="hero-content">
+    <span class="hero-badge">✨ A Little Wonder {% trans "全域服務中心" %}</span>
+    <h1 class="hero-title">
+      {% if user.is_authenticated %}
+        {% blocktrans with name=user.first_name|default:user.username %}歡迎回來，{{ name }}！{% endblocktrans %}
+      {% else %}
+        {% trans "探索 A Little Wonder 精彩數位旅程" %}
+      {% endif %}
+    </h1>
+    <p class="hero-subtitle">
+      {% trans "登入一次，暢行全站所有專屬習慣養成、AI 日誌與探索工具！" %}
+    </p>
+
+    <!-- Stats Bar -->
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <span class="stat-num">{{ active_apps_count }}</span>
+        <span class="stat-text">{% trans "已上線應用" %}</span>
+      </div>
+      {% if new_apps_count > 0 %}
+      <div class="stat-pill highlight-pill">
+        <span class="stat-num">✨ {{ new_apps_count }}</span>
+        <span class="stat-text">{% trans "本週新品" %}</span>
+      </div>
+      {% endif %}
+      <div class="stat-pill">
+        <span class="stat-num">{{ total_apps_count }}</span>
+        <span class="stat-text">{% trans "規劃總專案" %}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Filter -->
+<div class="filter-container">
+  <button class="filter-btn active" data-category="all">{% trans "全部應用" %} ({{ total_apps_count }})</button>
+  {% for cat in categories %}
+  <button class="filter-btn" data-category="{{ cat.key }}">
+    {{ cat.name }} ({{ cat.count }})
+  </button>
+  {% endfor %}
+</div>
+
+<!-- App Grid (Dynamic Registry) -->
+{% if apps %}
+<div class="card-grid app-grid">
+  {% for app in apps %}
+  <div class="card app-card" data-category="{{ app.category }}" id="app-card-{{ app.app_id }}">
+    <div class="app-card-top">
+      <div class="app-icon-wrapper">
+        <span class="app-icon">{{ app.icon }}</span>
+      </div>
+      <div class="app-badges">
+        <span class="badge-app-id">#{{ app.app_id }}</span>
+        {% if app.is_new %}
+          <span class="badge-new">✨ NEW</span>
+        {% endif %}
+        {% if app.status == 'active' %}
+          <span class="badge-status badge-active">{% trans "正式上線" %}</span>
+        {% elif app.status == 'beta' %}
+          <span class="badge-status badge-beta">{% trans "公測中" %}</span>
+        {% elif app.status == 'upcoming' %}
+          <span class="badge-status badge-upcoming">{% trans "即將推出" %}</span>
+        {% elif app.status == 'maintenance' %}
+          <span class="badge-status badge-maintenance">{% trans "維護中" %}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <h2 class="app-title">{{ app.localized_name }}</h2>
+    <p class="app-desc">{{ app.localized_description }}</p>
+
+    <div class="app-card-footer">
+      {% if app.is_available %}
+        <a href="{{ app.route_path }}" class="btn btn-primary btn-block btn-open-app" id="open-app-{{ app.app_id }}">
+          {% trans "開啟應用 ➔" %}
+        </a>
+      {% else %}
+        <button class="btn btn-disabled btn-block" disabled>
+          {% trans "即將推出 (Coming Soon)" %}
+        </button>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-state-icon">🏖️</div>
+  <p class="empty-state-text">{% trans "目前大廳尚未註冊任何子系統，請由管理後台新增！" %}</p>
+  <a href="/admin/portal/appmodule/add/" class="btn btn-primary">{% trans "前往 Django Admin 新增應用" %}</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const appCards = document.querySelectorAll('.app-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cat = btn.dataset.category;
+      appCards.forEach(card => {
+        if (cat === 'all' || card.dataset.category === cat) {
+          card.style.display = 'flex';
+          card.style.animation = 'fadeIn 0.3s ease';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{% endblock %}

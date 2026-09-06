@@ -1,0 +1,92 @@
+# ==============================================================================
+# Git Ignore - Unified Portal (Django 5.x)
+# ==============================================================================
+
+# ===============================
+# 環境變數與機密資訊 (Environment & Secrets)
+# ===============================
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# ===============================
+# 資料庫與本機資料 (Database & Local Data)
+# ===============================
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+db.sqlite3-journal
+*.db
+
+# ===============================
+# Python 快取與編譯檔 (Bytecode & Cache)
+# ===============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ===============================
+# 虛擬環境 (Virtual Environments)
+# ===============================
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ===============================
+# Django 靜態收集與上傳檔案 (Static & Media)
+# ===============================
+staticfiles/
+media/
+uploads/
+
+# ===============================
+# 日誌檔 (Logs)
+# ===============================
+*.log
+logs/
+
+# ===============================
+# 測試與覆蓋率報告 (Testing & Coverage)
+# ===============================
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# ===============================
+# 編輯器與作業系統暫存檔 (IDE & OS)
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini

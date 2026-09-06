@@ -1,0 +1,113 @@
+# English translations for 00-UnifiedPortal.
+msgid ""
+msgstr ""
+"Project-Id-Version: 00-UnifiedPortal 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-29 19:25+0800\n"
+"PO-Revision-Date: 2026-08-29 19:25+0800\n"
+"Last-Translator: Antigravity\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "A Little Wonder 統一應用大廳 - 一站式探索全系列 Web 產品與服務"
+msgstr "A Little Wonder Unified Hub - One-stop portal for all web products"
+
+msgid "A Little Wonder 應用大廳"
+msgstr "A Little Wonder Hub"
+
+msgid "應用中心"
+msgstr "App Center"
+
+msgid "登入"
+msgstr "Log in"
+
+msgid "登出"
+msgstr "Log out"
+
+msgid "語言"
+msgstr "Language"
+
+msgid "統一應用大廳"
+msgstr "Unified Hub"
+
+msgid "A Little Wonder 應用大廳 - 一站式探索全系列 Web 產品"
+msgstr "A Little Wonder Hub - Explore all Web products"
+
+msgid "全域服務中心"
+msgstr "Global Service Hub"
+
+msgid "歡迎回來，%(name)s！"
+msgstr "Welcome back, %(name)s!"
+
+msgid "探索 A Little Wonder 精彩數位旅程"
+msgstr "Explore A Little Wonder Digital Journey"
+
+msgid "登入一次，暢行全站所有專屬習慣養成、AI 日誌與探索工具！"
+msgstr "Sign in once to access all habits, AI journals, and exploration tools seamlessly!"
+
+msgid "已上線應用"
+msgstr "Active Apps"
+
+msgid "本週新品"
+msgstr "New this week"
+
+msgid "規劃總專案"
+msgstr "Total Apps"
+
+msgid "全部應用"
+msgstr "All Apps"
+
+msgid "正式上線"
+msgstr "Active"
+
+msgid "公測中"
+msgstr "Beta"
+
+msgid "即將推出"
+msgstr "Upcoming"
+
+msgid "維護中"
+msgstr "Maintenance"
+
+msgid "開啟應用 ➔"
+msgstr "Open App ➔"
+
+msgid "即將推出 (Coming Soon)"
+msgstr "Coming Soon"
+
+msgid "目前大廳尚未註冊任何子系統，請由管理後台新增！"
+msgstr "No apps registered in the hub yet. Please add apps in Django Admin!"
+
+msgid "前往 Django Admin 新增應用"
+msgstr "Go to Django Admin to Add Apps"
+
+msgid "登入 - A Little Wonder 統一應用大廳"
+msgstr "Log in - A Little Wonder Unified Hub"
+
+msgid "登入 A Little Wonder 應用大廳"
+msgstr "Sign in to A Little Wonder Hub"
+
+msgid "全系統統一採用 Google 帳號一鍵登入，登入一次暢行全站所有應用！"
+msgstr "Unified sign-in with Google. Log in once to access all apps across the platform!"
+
+msgid "使用 Google 帳號一鍵登入"
+msgstr "Sign in with Google"
+
+msgid "統一登入 (SSO) 特色"
+msgstr "Single Sign-On (SSO) Features"
+
+msgid "首次授權自動配置全站通用的會員身分"
+msgstr "First authorization automatically provisions your global account"
+
+msgid "進出各子專案（打卡、學習日誌）免重複輸入帳密"
+msgstr "Navigate across projects (check-in, journal) without re-entering credentials"
+
+msgid "採用 Google OAuth 2.0 銀行級安全防護機制"
+msgstr "Secured with enterprise-grade Google OAuth 2.0 protocol"
+
+msgid "系統管理者後台登入："
+msgstr "System Admin Login:"
