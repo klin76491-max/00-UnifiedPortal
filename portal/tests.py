@@ -183,3 +183,185 @@ class AccountsViewsTestCase(TestCase):
         response = self.client.post(reverse('accounts:logout'), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertFalse('_auth_user_id' in self.client.session)
+
+
+import json
+import tempfile
+from io import StringIO
+from django.core.management import call_command
+from portal.management.commands.sync_apps import sync_apps_from_json
+
+
+class AppModuleJSONSyncTestCase(TestCase):
+    """5. 測試 apps.json 批次動態同步、Management Command 與 Admin 一鍵按鈕"""
+
+    def setUp(self):
+        self.client = Client()
+        self.admin_user = User.objects.create_superuser(
+            username='admin@example.com',
+            email='admin@example.com',
+            password='password123'
+        )
+
+    def test_sync_from_valid_json_file(self):
+        """測試從有效 JSON 檔案匯入子應用模組"""
+        sample_data = [
+            {
+                "app_id": "test01",
+                "icon": "⚡",
+                "name_zh": "測試專案一",
+                "name_en": "Test App One",
+                "description_zh": "簡介一",
+                "description_en": "Desc One",
+                "category": "lifestyle",
+                "route_path": "/test01/",
+                "target_port": 8011,
+                "status": "active",
+                "is_new": True,
+                "is_active": True,
+                "display_order": 1
+            },
+            {
+                "app_id": "test02",
+                "icon": "🚀",
+                "name_zh": "測試專案二",
+                "name_en": "Test App Two",
+                "description_zh": "簡介二",
+                "description_en": "Desc Two",
+                "category": "creative",
+                "route_path": "/test02/",
+                "target_port": 8012,
+                "status": "upcoming",
+                "is_new": False,
+                "is_active": True,
+                "display_order": 2
+            }
+        ]
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as tf:
+            json.dump(sample_data, tf)
+            temp_path = tf.name
+
+        try:
+            result = sync_apps_from_json(temp_path)
+            self.assertTrue(result['success'])
+            self.assertEqual(result['created'], 2)
+            self.assertEqual(result['updated'], 0)
+
+            app1 = AppModule.objects.get(app_id="test01")
+            self.assertEqual(app1.name_zh, "測試專案一")
+            self.assertEqual(app1.icon, "⚡")
+            self.assertTrue(app1.is_new)
+
+            app2 = AppModule.objects.get(app_id="test02")
+            self.assertEqual(app2.name_zh, "測試專案二")
+            self.assertEqual(app2.status, "upcoming")
+        finally:
+            import os
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    def test_sync_upsert_updates_existing_preserves_others(self):
+        """測試 Upsert 行為：更新既有項目、新增新項目，且保留未列於 JSON 內的資料庫項目"""
+        existing_in_json = AppModule.objects.create(
+            app_id='mod01',
+            icon='📁',
+            name_zh='原名稱',
+            name_en='Old Name',
+            description_zh='原描述',
+            description_en='Old Desc',
+            category='other',
+            route_path='/old/',
+            target_port=8001
+        )
+        not_in_json = AppModule.objects.create(
+            app_id='mod99',
+            icon='🔒',
+            name_zh='未列於JSON的獨立應用',
+            name_en='Independent App',
+            description_zh='保留不刪除',
+            description_en='Should be preserved',
+            category='other',
+            route_path='/keep/',
+            target_port=8099
+        )
+
+        update_data = [
+            {
+                "app_id": "mod01",
+                "icon": "✨",
+                "name_zh": "更新後的模組一",
+                "name_en": "Updated Module One",
+                "description_zh": "更新後的描述",
+                "description_en": "Updated Desc",
+                "category": "learning",
+                "route_path": "/updated/",
+                "target_port": 8005,
+                "status": "active"
+            },
+            {
+                "app_id": "mod02",
+                "icon": "🎉",
+                "name_zh": "新模組二",
+                "name_en": "New Module Two",
+                "route_path": "/new2/",
+                "target_port": 8006
+            }
+        ]
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as tf:
+            json.dump(update_data, tf)
+            temp_path = tf.name
+
+        try:
+            result = sync_apps_from_json(temp_path)
+            self.assertTrue(result['success'])
+            self.assertEqual(result['created'], 1)
+            self.assertEqual(result['updated'], 1)
+
+            existing_in_json.refresh_from_db()
+            self.assertEqual(existing_in_json.name_zh, "更新後的模組一")
+            self.assertEqual(existing_in_json.icon, "✨")
+            self.assertEqual(existing_in_json.target_port, 8005)
+
+            # 確認未在 JSON 中的獨立項目仍存在且完好
+            not_in_json.refresh_from_db()
+            self.assertEqual(not_in_json.name_zh, "未列於JSON的獨立應用")
+        finally:
+            import os
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    def test_sync_apps_management_command(self):
+        """測試 sync_apps 管理指令執行"""
+        out = StringIO()
+        sample_data = [{
+            "app_id": "cmd01",
+            "name_zh": "指令測試",
+            "name_en": "Cmd Test",
+            "route_path": "/cmd/"
+        }]
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as tf:
+            json.dump(sample_data, tf)
+            temp_path = tf.name
+
+        try:
+            call_command('sync_apps', '--file', temp_path, stdout=out)
+            self.assertIn("[SUCCESS]", out.getvalue())
+            self.assertTrue(AppModule.objects.filter(app_id="cmd01").exists())
+        finally:
+            import os
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    def test_admin_sync_button_view(self):
+        """測試 Django Admin sync-json 端點與重新導向"""
+        # 未登入存取應重新導向至登入頁
+        resp = self.client.get(reverse('admin:portal_appmodule_sync_json'))
+        self.assertEqual(resp.status_code, 302)
+
+        # 管理員登入後執行同步
+        self.client.force_login(self.admin_user)
+        resp = self.client.get(reverse('admin:portal_appmodule_sync_json'), follow=True)
+        self.assertEqual(resp.status_code, 200)
+        # 應重定向至 changelist 頁面
+        self.assertIn('/admin/portal/appmodule/', resp.redirect_chain[0][0])
+

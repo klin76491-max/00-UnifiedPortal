@@ -1,0 +1,11 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url 'admin:portal_appmodule_sync_json' %}" class="historylink" style="background: linear-gradient(135deg, #2d7a8a, #1a3a52); color: #ffffff !important; font-weight: 600; border-radius: 4px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; margin-right: 8px;">
+      <span>🔄</span> {% trans "從 apps.json 重新同步" %}
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}

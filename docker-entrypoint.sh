@@ -23,4 +23,15 @@ if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; t
     python manage.py createsuperuser --noinput || true
 fi
 
+# 自動從 apps.json 同步子專案模組清單
+# 若掛載目錄中尚未有 apps.json，首次開機自動從範本 apps.example.json 初始化
+if [ -n "$DATA_DIR" ] && [ ! -f "$DATA_DIR/apps.json" ] && [ -f "apps.example.json" ]; then
+    echo "First time setup: Initializing $DATA_DIR/apps.json from apps.example.json..."
+    cp apps.example.json "$DATA_DIR/apps.json" || true
+fi
+
+echo "Checking apps.json for dynamic app modules..."
+python manage.py sync_apps --silent-if-missing || true
+
 exec "$@"
+

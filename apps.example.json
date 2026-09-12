@@ -1,0 +1,32 @@
+[
+  {
+    "app_id": "01",
+    "icon": "🔥",
+    "name_zh": "粉絲挑戰打卡系統",
+    "name_en": "Fans Challenge Check-in",
+    "description_zh": "每日打卡挑戰、連續紀錄、動態熱力圖與激勵排行榜",
+    "description_en": "Daily check-in challenges, streak tracking, activity heatmap and community leaderboard",
+    "category": "habit",
+    "route_path": "/challenges/",
+    "target_port": 8001,
+    "status": "active",
+    "is_new": true,
+    "is_active": true,
+    "display_order": 1
+  },
+  {
+    "app_id": "02",
+    "icon": "📓",
+    "name_zh": "AI 學習日誌系統",
+    "name_en": "AI Learning Journal",
+    "description_zh": "子彈筆記、學習反思與 AI 智慧教練引導式對話",
+    "description_en": "Bullet journal, structured reflections, and AI coach guided conversations",
+    "category": "learning",
+    "route_path": "/journal/",
+    "target_port": 8002,
+    "status": "upcoming",
+    "is_new": false,
+    "is_active": true,
+    "display_order": 2
+  }
+]

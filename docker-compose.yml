@@ -9,9 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - alw_portal_data:/app
+      - ../dockerVolumn/00-UnifiedPortal:/app/data
     restart: unless-stopped
 
-volumes:
-  alw_portal_data:
 

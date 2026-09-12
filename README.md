@@ -69,7 +69,7 @@ docker build -t alw-portal:latest .
 # -p 127.0.0.1:8081:8000: 將本機 8081 映射到容器內的 8000 埠
 # --env-file: 載入 .env 環境變數
 # -e DJANGO_SUPERUSER_*: 首次啟動容器時自動建立 Django 超級管理員
-# -v: 將 SQLite 資料庫持久化保存在本機 dockerVolumn/00-UnifiedPortal
+# -v: 將 SQLite 資料庫與 apps.json 持久化保存在本機 dockerVolumn/00-UnifiedPortal
 docker run -d \
   --name alw-portal \
   -p 127.0.0.1:8081:8000 \
@@ -81,6 +81,10 @@ docker run -d \
   --restart unless-stopped \
   alw-portal:latest
 ```
+
+> [!TIP]
+> **動態子專案 JSON 掛載**：您可直接將 `apps.json` 放置於主機的 `../dockerVolumn/00-UnifiedPortal/apps.json`。容器每次啟動時均會自動同步上架；運行中修改亦可直接執行 `docker exec alw-portal python manage.py sync_apps` 或於後台一鍵同步。
+
 
 ### 3. 查看運行狀態與日誌
 ```bash
@@ -152,7 +156,56 @@ location /dashboard/ {
 docker exec alw-nginx nginx -s reload
 ```
 
-#### 步驟 3：在 Django Admin 後台登記上架 (0 程式碼改動)
+#### 步驟 3：登記上架至應用大廳 (提供 JSON 批次同步與後台手動兩種機制)
+
+##### 🌟 方式 A (推薦)：使用 `apps.json` 批次新增與自動同步 (JSON File Sync)
+
+本系統支援透過宣告式 JSON 檔管理子專案，極度適合每週高頻發布！
+
+1. **編寫或編輯 `apps.json`**：  
+   請將檔案放置於持久化資料夾（容器掛載對應位置）：  
+   `dockerVolumn/00-UnifiedPortal/apps.json`（本地開發可置於 `data/apps.json` 或專案根目錄，亦可參考根目錄 `apps.example.json` 範本）。
+
+   ```json
+   [
+     {
+       "app_id": "03",
+       "icon": "📊",
+       "name_zh": "個人數據儀表板",
+       "name_en": "Personal Data Dashboard",
+       "description_zh": "全方位生活數據追蹤、圖表分析與趨勢洞察",
+       "description_en": "Comprehensive personal metrics tracking, visual analytics and trend insights",
+       "category": "lifestyle",
+       "route_path": "/dashboard/",
+       "target_port": 8003,
+       "status": "active",
+       "is_new": true,
+       "is_active": true,
+       "display_order": 3
+     }
+   ]
+   ```
+
+2. **觸發同步（以下 3 種方式任選一種即可即刻生效）：**
+   - **途徑 ① (最直覺 - 後台一鍵同步)**：  
+     登入 Portal Admin 後台 (`/admin/portal/appmodule/`)，右上角直接點擊 **「🔄 從 apps.json 重新同步」** 按鈕，系統瞬間完成更新並彈出成功提示！
+   - **途徑 ② (容器熱刷新 - CLI 指令)**：  
+     ```bash
+     docker exec alw-portal python manage.py sync_apps
+     # 本地開發環境：python manage.py sync_apps
+     ```
+   - **途徑 ③ (容器重啟自動載入)**：  
+     ```bash
+     docker restart alw-portal
+     ```
+     容器開機時（`docker-entrypoint.sh`）會自動讀取掛載目錄的 `apps.json` 完成資料庫同步。
+
+> [!TIP]
+> **安全 Upsert 特性**：同步機制以 `app_id` 為唯一識別碼，只會建立新模組或更新現有欄位，未列在 JSON 裡的資料庫既有專案**不會被刪除或影響**。
+
+---
+
+##### 🛠️ 方式 B：在 Django Admin 後台手動填表登記
 1. 進入 Portal 後台：`https://hub.yourdomain.com/admin/`
 2. 點擊 **「子應用模組清單」 $\rightarrow$ 「新增子應用模組」**：
    - **專案編號**：`03`
