@@ -8,6 +8,32 @@ if [ -f ".env" ]; then
     set +a
 fi
 
+# 若配置 PostgreSQL，等待資料庫連線就緒
+if [ -n "$DB_HOST" ] && [ "$USE_SQLITE" != "True" ] && [ "$USE_SQLITE" != "true" ]; then
+    echo "Waiting for PostgreSQL ($DB_HOST:${DB_PORT:-5432}) to become ready..."
+    python - <<'EOF'
+import os
+import socket
+import time
+import sys
+
+host = os.getenv('DB_HOST', 'host.docker.internal')
+port = int(os.getenv('DB_PORT', 5432))
+timeout = 30
+start = time.time()
+
+while time.time() - start < timeout:
+    try:
+        with socket.create_connection((host, port), timeout=2):
+            print(f"Database port {host}:{port} is open and ready!")
+            sys.exit(0)
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        time.sleep(1)
+
+print(f"Warning: Timed out waiting for database {host}:{port}, proceeding anyway...")
+EOF
+fi
+
 # 自動執行資料庫遷移
 echo "Running database migrations..."
 python manage.py migrate --noinput
